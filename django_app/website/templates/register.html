@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
-{% block content %}
-
-<h1> Register </h1>
-
+    {% block content %}
+    <div class="col-md-6 offset-md-3">
+        <h1> Register </h1>
+        <br/>
+        <form method="POST" action="">
+            <!-- IMPORTANT: Anytime you create a form in django you need csrf_token 
+            => that is a cross-site request forgery token it helps your form from getting hijacked by hackers -->
+            {% csrf_token %}
+            {{form.as_p}}
+            <br/>
+            <button type="submit" class="btn btn-secondary">Register</button>
+        </form>
+    </div>
 {% endblock %}
