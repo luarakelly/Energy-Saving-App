@@ -22,11 +22,15 @@ def home(request):
     else:  
         return render(request, 'home.html', {})
 
-#to have a eparated page to log in:
+#to have a separated page to login:
 #def login_user(request):
 #    pass
 #if you do no want to oyu can add it in home aswell.
 
 def logout_user(request):
-    pass
+    logout(request)
+    messages.success(request, 'You are logged out.')
+    return redirect('home')
 
+def register_user(request):
+    return render(request, 'register.html')
