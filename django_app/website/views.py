@@ -14,10 +14,11 @@ def home(request):
         auth = authenticate(request, user_name= user_name, password= password)
         if auth is not None:
             login(request, auth)
-            messages.success(request, 'You are loged in!')
+            messages.success(request, 'You are logged in!')
             return redirect('home')
         else:
             messages.success(request, 'Wrong user name or password, recheck it and try again.')
+            return redirect('home')
     else:  
         return render(request, 'home.html', {})
 
