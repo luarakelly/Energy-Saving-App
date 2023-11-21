@@ -1,1 +1,29 @@
-<h1>hello!</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="col-md-6 offset-md-3">
+    {% if user.is_authenticated %}
+    <h1>Welcome!</h1>
+    {% else %}
+
+    <h1>Login</h1>
+    <br/>
+    <form method="POST" action="{% url 'home' %}">
+        <!-- IMPORTANT: Anytime you create a form in django you need csrf_token 
+            => that is a cross-site request forgery token it helps your form from getting hijacked by hackers -->
+        {% csrf_token %}
+        <div class="mb-3">
+            <input type="text" class="form-control" name="user_name" placeholder="User name" required>
+            <div id="emailHelp" class="form-text">Your user name has to be unique.</div>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" name="password" placeholder="Password" required>
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-secondary">Login</button>
+    </form>
+</div>
+
+{% endif %}
+{% endblock %}
