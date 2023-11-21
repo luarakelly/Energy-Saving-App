@@ -1,0 +1,19 @@
+# Install Mysql in my computer
+# pip install mysql
+# pip install mysql-connector-python or mysql-connector
+# make some changes in the django db configuration in settings.py
+
+import mysql.connector
+
+data_base = mysql.connector.connect(
+    host = 'localhost',
+    user = 'root',
+    password = 'Mayara-0210',
+)
+
+#prepare a cursor object
+cursorOject = data_base.cursor()
+#create a data base
+cursorOject.execute("CREATE DATABASE energy_consumption_bd")
+
+print('done')

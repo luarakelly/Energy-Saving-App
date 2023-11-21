@@ -25,12 +25,11 @@ if 'text/html' in content_type:
     soup.prettify()
     results=soup.find_all( 'div', class_='tF2Cxc' ) 
     # description_results=soup.find_all( 'div', class_='VwiC3b' ) 
-    array=[]
+    
     for i in results:
         title = i.find('h3').text
         link = i.find('a')['href']
         description = i.find(class_='VwiC3b')
-        array.append(description)
         # bold_words=  i.find('em')         
         
         text = description.text.strip()
