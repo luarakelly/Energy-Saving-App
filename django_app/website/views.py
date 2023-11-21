@@ -18,7 +18,8 @@ def home(request):
             return redirect('home')
         else:
             messages.success(request, 'Wrong user name or password, recheck it and try again.')
-    return render(request, 'home.html', {})
+    else:  
+        return render(request, 'home.html', {})
 
 #to have a eparated page to log in:
 #def login_user(request):
