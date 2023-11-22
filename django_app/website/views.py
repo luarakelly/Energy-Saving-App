@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUpForm
+from .forms import SignUp
 
 def home(request):
     # Check to see if loged in
@@ -35,18 +35,20 @@ def logout_user(request):
 
 def register_user(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = SignUp(request.POST)
         if form.is_valid():
             form.save()
-			# Authenticate and login
+			# clean the form fields
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
+            # Authenticate and login
             user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, "You Have Successfully Registered! Welcome!")
             return redirect('home')
-    else:
-        form = SignUpForm()
-        return render(request, 'register.html', {'form':form})
-    
-    return render(request, 'register.html', {'form':form})
+
+        #or #form = SignUp()
+            #return render(request, 'register.html', {'form':form})
+
+    context = {'form':SignUp()}
+    return render(request, 'register.html', context)
