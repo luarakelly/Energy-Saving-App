@@ -46,9 +46,13 @@ def register_user(request):
             login(request, user)
             messages.success(request, "You Have Successfully Registered! Welcome!")
             return redirect('home')
-
-        #or #form = SignUp()
-            #return render(request, 'register.html', {'form':form})
+        else:
+            # If the form is not valid, display form errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
 
     context = {'form':SignUp()}
     return render(request, 'register.html', context)
+    #or #form = SignUp()
+        #return render(request, 'register.html', {'form':form})
