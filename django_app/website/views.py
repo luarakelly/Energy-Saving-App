@@ -2,7 +2,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUp
+from .forms import SignUp, UserProfileForm
+
 
 def home(request):
     # Check to see if loged in
@@ -45,7 +46,7 @@ def register_user(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, "You Have Successfully Registered! Welcome!")
-            return redirect('home')
+            return redirect('profile') # 
         else:
             # If the form is not valid, display form errors
             for field, errors in form.errors.items():
@@ -56,3 +57,20 @@ def register_user(request):
     return render(request, 'register.html', context)
     #or #form = SignUp()
         #return render(request, 'register.html', {'form':form})
+    
+def profile(request):
+    try:
+        user_profile = request.user.userprofile
+    except UserProfile.DoesNotExist:
+        user_profile = None
+
+    if request.method == 'POST':
+        profile_form = UserProfileForm(request.POST, instance=user_profile)
+        if profile_form.is_valid():
+            profile = profile_form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+    else:
+        profile_form = UserProfileForm(instance=user_profile)
+
+    return render(request, 'profile.html', {'profile_form': profile_form})

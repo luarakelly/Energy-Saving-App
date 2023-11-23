@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm #it is a built in form
 from django.contrib.auth.models import User #it is built in model
 from django import forms #describes a form from djangos alredy made forms and determines how it works and appears. form class’s fields map to HTML form <input> elements.
-
+from .models import Kitchen #for timeline preview with records
+from .models import UserProfile
 
 class SignUp(UserCreationForm):
     email = forms.EmailField(label='', widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Adress'}))
@@ -31,4 +32,20 @@ class SignUp(UserCreationForm):
         self.fields['password2'].label=''
         self.fields['password2'].help_text='<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'	
 
+#additional fields for users to fill in on the profile page
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('phone', 'address', 'city', 'state', 'cep')
+        widgets = {
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone'}),
+            'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
+            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'State'}),
+            'cep': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'CEP'}),
+        }
 
+class KitchenForm(forms.ModelForm):
+    class Meta:
+        model = Kitchen
+        fields = ['appliance', 'quantity', 'brand', 'model', 'hour_use_day', 'times_week']
