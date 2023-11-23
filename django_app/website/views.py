@@ -1,11 +1,14 @@
 # Create your views here.
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUp, UserProfileForm
-
+from .forms import SignUp, UserProfileForm, KitchenForm
+from .models import UserProfile, Kitchen
 
 def home(request):
+    #to take all the data from your table:
+    kitchen_appliances = Kitchen.objects.all().order_by('created_at')
+    #to pick the id: kitchen = get_object_or_404(Kitchen, pk=kitchen_id) contect = 'kitchen': kitchen
     # Check to see if loged in
     if request.method == 'POST': #after filling the form, whn you click submit, it will send a http request to the server, with the method in it.
         # to get the information tiped by the user:
@@ -22,12 +25,19 @@ def home(request):
             messages.success(request, 'Wrong user name or password. Please try again.')
             return redirect('home')
     else:  
-        return render(request, 'home.html', {})
+        #passin data that you took from the data base to be available in the home page:
+        return render(request, 'home.html', {'kitchen_appliances': kitchen_appliances})
 
-#to have a separated page to login:
-#def login_user(request):
-#    pass
-#if you do no want to oyu can add it in home aswell.
+# ATENTION - what i actually want to in a modal window, it does not look like that but is some start: PS I didnot added the URL yet.
+# def add_kitchen(request):
+    # if request.method == 'POST':
+        # form = KitchenForm(request.POST)
+        # if form.is_valid():
+            # form.save()
+            # return redirect('timeline')
+    # else:
+        # form = KitchenForm()
+    # return render(request, 'add_kitchen.html', {'form': form})
 
 def logout_user(request):
     logout(request)
