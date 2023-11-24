@@ -27,9 +27,10 @@ class Kitchen(models.Model):
     model = models.CharField(max_length=50)
     hour_use_day = models.IntegerField(validators=[MaxValueValidator(24)])
     times_week = models.IntegerField(validators=[MaxValueValidator(7)])
-    power_rate = models.IntegerField(validators=[MinValueValidator(1)])
+    power_rate = models.IntegerField()
     consumption_rate = models.CharField(max_length=50)
 
+    # __str__ Method in the model is primarily used for debugging purposes and to provide a string representation when an instance is displayed in the Django admin or other contexts.
     def __str__(self):
         # return what do you want to show on the screen if we just access one of these recods.
         return(f'({self.appliance} {self.brand})')

@@ -5,6 +5,7 @@ from .models import Kitchen #for timeline preview with records
 from .models import UserProfile
 
 class SignUp(UserCreationForm):
+    #adding filds that are not present in the model
     email = forms.EmailField(label='', widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Adress'}))
     first_name = forms.CharField(label='', max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'First Name'}))
     last_name = forms.CharField(label='',max_length=100, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Last Name'}))
@@ -13,7 +14,7 @@ class SignUp(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
-    #to overwrite the djangos user creation form attributs:
+    #to overwrite the attributes from the fields that alredy exists in djangos user creation html form:
     def __init__(self, *args, **kwargs):
         super(SignUp, self).__init__(*args, **kwargs)
 
@@ -37,6 +38,7 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('phone', 'address', 'city', 'state', 'cep')
+        #just adding custumization to the Html form
         widgets = {
             'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),

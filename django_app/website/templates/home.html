@@ -3,36 +3,64 @@
 {% block content %}
     <div class="col-md-6 offset-md-3">
         {% if user.is_authenticated %}
-            <h1>Appliances</h1>
-            <div class="container">                      
-                <div class="row text-center mb-5">
-                    <div class="col-xl-6 col-lg-8">
-                        <h2 class="font-weight-bold">Kitchen</h2>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="timeline-steps d-flex flex-row overflow-auto">
-                            {% if kitchen_appliances %}
-                                {% for appliance in kitchen_appliances %}
-                                    <div class="timeline-step me-3">
-                                        <div class="timeline-content" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="top" title="" data-bs-content="And here's some amazing content. It's very engaging. Right?" data-bs-original-title="2003">
-                                            <div class="inner-circle"></div>
-                                            <p class="h6 mt-3 mb-1">{{ appliance.consumption_rate }} W/month</p>
-                                            <p class="h6 text-muted mb-0 mb-lg-0">{{ appliance.appliance }}</p>
+            <div><h2>The cheapest current contrat is: </h2></div>
+            </br>
+            <p class="text-muted">Check your devices performance.</p>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    Appliances
+                </button>
+                <ul class="dropdown-menu">
+                  <li>Kitchen</li>
+                  <li>Living Room</li>
+                  <li>Other</li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="timeline-steps aos-init aos-animate" data-aos="fade-up">
+                        {% if kitchen_appliances %}
+                            {% for appliance in kitchen_appliances %}
+                                <div class="timeline-step">
+                                    <div class="timeline-content" data-bs-toggle="modal" data-bs-target="#modal{{ appliance.id }}">
+                                        <div class="inner-circle"></div>
+                                        <p class="h6 mt-3 mb-1">{{ appliance.consumption_rate }} Kwh/month</p>
+                                        <p class="h6 text-muted mb-0 mb-lg-0">{{ appliance.appliance }}</p>
+                                    </div>
+                                </div>
+        
+                                <!-- Modal for the current appliance -->
+                                <div class="modal fade" id="modal{{ appliance.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">{{ appliance.appliance }} Details</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Appliance: {{ appliance.appliance }} </p>
+                                                <p>Quantity: {{ appliance.quantity }} </p>
+                                                <p>Brand: {{ appliance.brand }} </p>
+                                                <p>Model: {{ appliance.model }} </p>
+                                                <p>Hour used per day: {{ appliance.hour_use_day }} </p>
+                                                <p>Times in a week: {{ appliance.times_week }} </p>
+                                                <p>Power rate: {{ appliance.power_rate }} </p>
+                                                <p>Consumption Rate: {{ appliance.consumption_rate }} Kwh/month</p>
+                                            </div>
                                         </div>
                                     </div>
-                                {% endfor %}
-                            {% else %}
-                                <p>No appliances available.</p>
-                            {% endif %}
-                        </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No appliances available.</p>
+                        {% endif %}
                     </div>
                 </div>
-            </div>
+            </div>            
             </br>
-                
+            <div><h2>News </h2></div>
+            <div><h2>Predictions</h2></div>
+            
         {% else %}
             <h1>Login</h1>
             <br/>
@@ -41,7 +69,6 @@
                 => that is a cross-site request forgery token it helps your form from getting hijacked by hackers -->
                 {% csrf_token %}
                 <div class="mb-3">
-                    <!-- <div id="userHelp" class="form-text">Your user name has to be unique.</div> -->
                     <input type="text" class="form-control" name="username" placeholder="User name" required>
                 </div>
                 <br/>

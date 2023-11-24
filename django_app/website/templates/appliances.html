@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Appliances</h1>
+
+    <table class="table table-strip table-hover table-border">
+        <thead class="table-dark">
+            <tr>
+                <!-- Add an empty th for the dots column -->
+                <th></th>
+                <th scope="'col">Kitchen</th>
+                <th scope="'col">Quantity</th>
+                <th scope="'col">Brand</th>
+                <th scope="'col">Model</th>
+                <th scope="'col">Hours/day</th>
+                <th scope="'col">Times/week</th>
+                <th scope="'col">Power rate</th>
+                <th scope="'col">Consumption rate</th>
+            </tr>
+        </thead>
+
+        {% if kitchen_appliances %}
+            {% for appliance in kitchen_appliances %}
+            <tr>
+                <!-- Add a column for the dots -->
+                <td>
+                    <div>
+                        <!-- Add data-bs-toggle and data-bs-target attributes to trigger the modal -->
+                        <p data-bs-toggle="modal" data-bs-target="#modal{{ appliance.id }}">O</p>
+                    </div>
+                </td>
+                <td>{{ appliance.appliance }}</td>
+                <td>{{ appliance.quantity }}</td>
+                <td>{{ appliance.brand }}</td>
+                <td>{{ appliance.model }}</td>
+                <td>{{ appliance.hour_use_day }}</td>
+                <td>{{ appliance.times_week }}</td>
+                <td>{{ appliance.power_rate }}</td>
+                <td>{{ appliance.consumption_rate }}</td>
+            </tr>
+            <!-- Modal for the current appliance -->
+            <div class="modal" id="modal{{ appliance.id }}" tabindex="-1">
+            <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">{{ appliance.appliance }} Details</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Appliance: {{ appliance.appliance }} </p>
+                            <p>Quantity: {{ appliance.quantity }} </p>
+                            <p>Brand: {{ appliance.brand }} </p>
+                            <p>Model: {{ appliance.model }} </p>
+                            <p>Hour used per day: {{ appliance.hour_use_day }} </p>
+                            <p>Times in a week: {{ appliance.times_week }} </p>
+                            <p>Power rate: {{ appliance.power_rate }} </p>
+                            <p>Consumption Rate: {{ appliance.consumption_rate }} Kwh/month</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url 'delete_kichen_appliance' appliance.id %}"><button type="button" class="btn btn-secondary">Delete</button></a>
+                            <button type="button" class="btn btn-primary" href="#">Edit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No appliances available.</p>
+        {% endif %}
+    </table>
+    
+    <a href="{% url 'add_kitchen_record' %}" class="btn btn-secondary float-end">Add item</a>
+ 
+{% endblock %}

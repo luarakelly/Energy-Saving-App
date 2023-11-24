@@ -8,4 +8,7 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('register/', views.register_user, name='register'),
     path('profile/', views.profile, name='profile'),
+    path('appliances/', views.appliances, name='appliances'),
+    path('delete_kichen_appliance/<int:pk>', views.delete_kichen_appliance, name='delete_kichen_appliance'),
+    path('add_kitchen_record/', views.add_kitchen_record, name='add_kitchen_record'),
 ]

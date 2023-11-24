@@ -2,13 +2,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUp, UserProfileForm, KitchenForm
+from .forms import SignUp, UserProfileForm, KitchenForm 
 from .models import UserProfile, Kitchen
 
 def home(request):
     #to take all the data from your table:
     kitchen_appliances = Kitchen.objects.all().order_by('created_at')
-    #to pick the id: kitchen = get_object_or_404(Kitchen, pk=kitchen_id) contect = 'kitchen': kitchen
     # Check to see if loged in
     if request.method == 'POST': #after filling the form, whn you click submit, it will send a http request to the server, with the method in it.
         # to get the information tiped by the user:
@@ -28,16 +27,25 @@ def home(request):
         #passin data that you took from the data base to be available in the home page:
         return render(request, 'home.html', {'kitchen_appliances': kitchen_appliances})
 
-# ATENTION - what i actually want to in a modal window, it does not look like that but is some start: PS I didnot added the URL yet.
-# def add_kitchen(request):
-    # if request.method == 'POST':
-        # form = KitchenForm(request.POST)
-        # if form.is_valid():
-            # form.save()
-            # return redirect('timeline')
-    # else:
-        # form = KitchenForm()
-    # return render(request, 'add_kitchen.html', {'form': form})
+def appliances(request):
+    kitchen_appliances = Kitchen.objects.all().order_by('created_at')
+    return render(request, 'appliances.html', {'kitchen_appliances': kitchen_appliances})
+
+def delete_kichen_appliance(request, pk):
+    delete_it = Kitchen.objects.get(id=pk)
+    delete_it.delete()
+    messages.success(request, 'Deleted Successfully!')
+    return redirect('appliances')
+
+def add_kitchen_record(request):
+    form = KitchenForm(request.POST or None)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Added Successfully!')
+                return redirect('appliances')
+        return render(request, 'add_kitchen_record.html', {'form':form})
 
 def logout_user(request):
     logout(request)
@@ -49,7 +57,7 @@ def register_user(request):
         form = SignUp(request.POST)
         if form.is_valid():
             form.save()
-			# clean the form fields
+			# clean the form fields: Create a new instance of the model and populate it with the cleaned data, including the additional fields from the form.
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             # Authenticate and login
